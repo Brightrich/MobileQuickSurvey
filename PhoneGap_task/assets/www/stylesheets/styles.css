@@ -1,0 +1,208 @@
+/*
+* Mini layout for photography portfolio
+* Copyright 2012, Nataly Birch
+* www.land-of-web.com
+* Free for personal use
+*/
+
+/* #Basic Styles ================================================== */
+@font-face{
+font-family: 'Book Antique';
+src: url('../fonts/BKANT.ttf') format('truetype');
+}
+
+* {
+-moz-box-sizing: border-box;
+-webkit-box-sizing: border-box;
+box-sizing: border-box;	}
+
+body{
+font-family: Helvetica, Arial, Sans-serif;
+background: #f6f5f5; /* url(../images/body-bg.jpg)*/
+}
+
+a, a:visited {
+color: #111111;
+text-decoration: none;
+outline: 0;
+}
+
+a:hover, a:focus {
+color:#494747;
+}
+
+p{
+font-size: 14px;
+color: #625f5f;
+}
+
+/* LINES ================================================== */
+.lines{
+border-top: 1px solid #cdc9c9;
+border-bottom: 1px solid #fff;
+margin-top:20px;
+}
+
+.lines2{
+display:block;
+height:1px;
+border-top: 1px solid #cdc9c9;
+border-bottom: 1px solid #fff;
+padding-bottom:0px;
+}
+
+/* HEADER ================================================== */
+.header{
+height:55px;
+}
+
+/* NAVIGATION ================================================== */
+nav{
+float: left;
+padding-top:15px;
+}
+
+nav ul{
+float: left;
+margin-top: 1px;
+}
+
+nav ul li{
+float: left;
+margin-left: 20px;
+color: #67b256;
+}
+
+nav ul li a{
+display: inline-block;
+padding-right: 20px;
+text-decoration: none;
+font-family: 'Book Antique', serif;
+font-size: 16px;
+color: #625f5f;
+}
+
+nav ul li:last-child a{
+padding: 0;
+}
+
+nav ul li a.active{
+color:#353434;
+}
+
+nav ul li a:hover{
+color:#353434;
+}
+
+/* CONTACT BLOCK ================================================== */
+.contact_block{
+display: block;
+padding-top:5px;
+width: 180px;
+height: 32px;
+float: right;
+text-shadow: none;
+}
+.contact_block p {
+text-align:right;
+font-weight:bold; 
+}
+
+/* SLIDER ================================================== */
+.slider{
+margin-top:10px;
+margin-bottom:10px;
+}
+
+/* TESTIMONIAL ================================================== */
+.testimonial{
+margin: 20px auto;
+padding: 0 40px;
+}
+
+.testimonial img{
+float: left;
+margin-right: 35px;
+border: 5px solid #fff;
+box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+blockquote{
+background: url(../images/quote.png) no-repeat;
+overflow: hidden;
+border: none;
+}
+
+blockquote p{
+font-size: 14px;
+padding-left: 40px;
+font-style: normal;
+}
+
+blockquote a{
+display: block;
+text-align: right;
+font-size: 12px;
+font-style: italic;
+}
+
+cite{
+text-align: right;
+font-style: normal;
+color: #23353e;
+}
+
+/* FOOTER ================================================== */
+.footer p{
+font-family: 'Book Antique';
+font-size: 12px;
+color: #625f5f;
+}
+
+ ul.social {
+float: left;
+
+}
+
+ul.social li{
+float: left;
+margin-left: 10px;
+color: #67b256;
+}
+
+ul.social li a{
+display: inline-block;
+padding-right: 5px;
+text-decoration: none;
+font-family: 'Book Antique', serif;
+font-size: 14px;
+color: #625f5f;
+}
+
+/* Media Queries ================================================== */
+@media only screen and (max-width: 767px) {
+nav{
+float: left;
+margin-top: 15px;
+}
+
+nav ul li:first-child{
+margin-left: 0;
+}
+
+ul.social {
+float: left;
+margin-top: 15px;
+}
+
+ul.social li:first-child{
+margin-left: 0;
+}
+.testimonial img{
+display: none;
+}
+
+@media only screen and (max-width: 479px) {
+nav ul li:last-child{
+margin-left: 0;
+}}

@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+
+<h1>Entry Data Kejadian</h1>
+<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+
+<script src="jquery.js"></script>
+<script src="jquery.mobile-1.0.min.js"></script>
+
+<link rel="stylesheet"  href="jquery.mobile-1.0.min.css" />
+
+<form action="result.html" id="form" onSubmit="return callNewActivity()" data-ajax="false">
+
+<div>
+<label for="taskname">Headlines:</label><br/>
+<input type="text" name="task[name]" id="taskname"/>
+</div>
+
+<div>
+<label for="taskdesc">Deskripsi Kejadian:</label><br/>
+<textarea name="task[description]" rows="5" id="taskdesc"></textarea>
+</div>
+
+<div>
+<label for="taskdue">Tempat Kejadian:</label><br/>
+<input type="text" name="task[due]" id="taskdue"/>
+</div>
+
+<div>
+<textarea name="task[phone]" rows="5" id="phone"></textarea>
+</div>
+
+<a href="#" data-role="button" onClick="callNewActivity();">Submit</a> 
+
+</form>
+
+
+<script>
+  $(function(){
+    $("#phone").text("PASSING PARAM RESULT: " + 
+            window.MyCls.getTelephoneNumber());
+  });
+
+
+
+
+function callNewActivity() {
+ 		alert("PREVENT SUBMISSION");
+  		alert('Handler for .submit() called.');
+        window.MainActivity.sendMessage();
+        return false;
+    }
+  
+</script>

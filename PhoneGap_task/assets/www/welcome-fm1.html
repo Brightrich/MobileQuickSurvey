@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width" />
+	
+	<!-- 960 grid-->
+	<link rel="stylesheet" href="css/960_24_col.css" />
+		
+	<!-- templatemo style-->
+	<link rel="stylesheet" href="css/templatemo_style.css" />
+		
+	<!-- jquery plugin -->		
+	  	<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+  		<script src="js/jquery-ui.min.js"></script>
+  		<script src="js/jquery.min.js"></script>		 
+	
+		
+	<!-- templatemo config -->
+	<script src="js/templatemo_config.js"></script>
+        
+    
+
+</head>
+<body data-role="page" id="page1">
+			<div class="container_24">
+					<div class="grid_24 alpha omega" id="banner">
+							<div class="grid_18 alpha">
+								<img alt="avocado theme" src="images/logo.png" />
+							</div>
+							<div class="grid_6 omega">
+								
+							</div>
+                          
+					</div>
+					<div class="grid_18 alpha" id="mid_container_wap">
+						<div class="grid_18 alpha mid_container" id="about">
+                            
+								<div class="grid_15 omega">
+                                    
+								
+									<img alt="image 1" src="images/gallery/Available.png" style="margin-left:2px;width:686px;"/>
+								
+                                    								
+						</div>
+					</div>
+							
+                            
+                            
+							<div class="grid_18 alpha mid_container" id="testimonials">
+										<div class="prefix_1 grid_16 alpha">
+												<h1>Meeting Information</h1>
+												<div class="grid_7 alpha">
+														<div class="grid_3 alpha"><img alt="Testimonial 1" src="images/gallery/testimonial_01.jpg" /> </div>
+														<div class="grid_4 omega">
+																<p><h1><strong id="roomName"><br><br>R. Meeting Veronica</strong></h1></p>
+														</div>
+												</div>
+												<div class="grid_8 prefix_1 omega">
+														<div class="grid_3 alpha"><img alt="Testimonial 4" src="images/gallery/testimonial_04.jpg" /></div>
+														<div class="grid_5 omega">
+																<p>
+																<h1><strong id="meetingTime"><br><br>08.00 - 10.00</strong></h1></p>
+														</div>
+												</div>
+                                                
+												<div class="clear"></div>
+                                                
+												<div class="grid_7 alpha">
+														<div class="grid_3 alpha"><img alt="Testimonial 2" src="images/gallery/testimonial_02.jpg" /></div>
+														<div class="grid_4 omega">
+																<p><h1>
+																<strong id="reservedBy"><br><br>Niken Susilowati</strong></h1></p>
+														</div>
+												</div>
+												<div class="grid_8 prefix_1 omega">
+														<div class="grid_3 alpha"><img alt="Testimonial 3" src="images/gallery/testimonial_03.jpg" /></div>
+														<div class="grid_5 omega">
+																<p><h1>
+																<strong id="agendaDesc">Planning, monitoring, maintenance server telkomsel</strong></h1></p>
+														</div>
+												</div>
+										</div>
+							</div>
+							
+					</div>
+                    
+					<div id="scheduleList" class="grid_6 omega" style="height:400px;width:250px;overflow-y:auto;overflow-x:hidden;">
+						<!--div class="grid_6 alpha omega anitem"><a class="anchor_animate" href="#testimonials">08.00 - 10.00</a></div>
+						<div class="grid_6 alpha omega anitem"><a class="anchor_animate" href="#about">10.00 - 12.30</a></div>
+						<div class="grid_6 alpha omega anitem"><a class="anchor_animate" href="#testimonials">12.30 - 13.30</a></div>
+						<div class="grid_6 alpha omega anitem" id="13.30-14.00"><a id="href13.30-14.00" class="anchor_animate" href="#about">13.30 - 14.00</a></div>
+						<div class="grid_6 alpha omega anitem" id="14.00-16.00"><a id="href14.00-16.00" class="anchor_animate" href="#testimonials">14.00 - 16.00</a></div>
+						<div class="grid_6 alpha omega anitem" id="16.00-17.00"><a class="anchor_animate" href="#about">16.00 - 17.00</a></div-->
+					</div>
+                    
+				<div class="grid_24 alpha omega" id="footer" >
+					<div>Copyright@2014 PT. Telekomunikasi Selular<input data-role="button" width="50" height="50" id="carol" onClick="sendMessage();"/></div>
+				</div>
+		</div>
+</body>
+</html>
+<script>			
+	var poller = "";
+	document.addEventListener("deviceready", onDeviceReady, false);
+    function onDeviceReady() {
+        document.addEventListener("backbutton", function (e) {
+            e.preventDefault();
+        }, false );
+        
+        document.addEventListener("menubutton", function (e) {
+            e.preventDefault();
+        }, false );
+        
+        document.addEventListener("searchbutton", function (e) {
+            e.preventDefault();
+        }, false );    
+        
+         poller = intervalTrigger();
+         queryNextFMOrder();
+  }   
+  
+  $.mobile.loadingMessage = false;
+  
+  $(document).bind("pageinit", "#page1", function(){
+  	
+  });
+	 
+  function changeData(data){
+    //roomName, meetingTime, reservedBy, agendaDesc
+    var dataParsed = data.split("~");
+  	document.getElementById("roomName").innerHTML = dataParsed[0];
+  	document.getElementById("meetingTime").innerHTML = dataParsed[1];
+  	document.getElementById("reservedBy").innerHTML = dataParsed[2];
+  	document.getElementById("agendaDesc").innerHTML = dataParsed[3]; 
+  	return true;  	
+  }
+  	 
+  function queryNextFMOrder(){
+  	
+  	//SCHEDULE FORMAT
+	//AVAILABLE#TIME#HIGHLIGHTED~
+	//N/A#RES_ID#TIME#RES_BY#PURPOSE#DESTINATION#HIGHLIGHTED~
+	
+	//ORDER FORMAT
+	//ORDER@SCH1~SCH2
+  
+  	var order = window.MainActivity.queryNextFMOrder();
+  	var parsedOrd = order.split("@");
+  	
+  	if(parsedOrd[0]!="NONE"){  		
+  		window.clearInterval(poller);
+  		window.MainActivity.processFMOrder(parsedOrd[0]);
+  	} else {
+  		//manipulating schedule list
+  		//clear scheduleList
+  		document.getElementById("scheduleList").innerHTML = "";
+  		
+  		var sch = parsedOrd[1].split("~");
+  		var highlightedId = "";
+  		for(var x = 0; x < sch.length ; x++){
+  			var schItem = sch[x].split("#");
+  			var divId = "";  			
+  			
+  			if(schItem[0] == "N/A"){
+  				divId = schItem[2];  				
+  				if(schItem[6] == "HIGHLIGHTED") {
+  					highlightedId = divId;
+  				}
+  				
+  				appendDiv(divId,schItem[0], divId, schItem[5], schItem[3], schItem[4]);  				
+  			} else {
+  				divId = schItem[1];  				
+  				if(schItem[2] == "HIGHLIGHTED") {
+  					highlightedId = divId;
+  				}
+  				
+  				appendDiv(divId,schItem[0], divId, null, null, null);
+  			}
+  			
+  			
+  			
+  		}
+  			  			
+  		if(highlightedId != ""){	
+	  		document.getElementById("scheduleList").scrollTop = document.getElementById(highlightedId).offsetTop;
+	  		var hrefId = "href"+highlightedId;
+			window.location=document.getElementById(hrefId).href;				
+			document.getElementById(hrefId).style.borderColor = '#ffffff';
+		}		
+  		
+  		  	
+  	}  	  	  	  	
+  }    
+  
+  function appendDiv(divId,state, time, roomName, reservedBy, agendaDesc) {
+	  var dive = document.createElement("div");
+	  dive.setAttribute("class", "grid_6 alpha omega");
+	  dive.setAttribute("id", divId);  
+	  
+	  var ae = document.createElement("a");
+	  ae.setAttribute("id","href"+divId);
+	  ae.setAttribute("class","anchor_animate");
+	  if(state == "N/A"){
+	  	ae.setAttribute("href", "#testimonials");
+	  	var data = roomName + "~" + time + "~" + reservedBy + "~" + agendaDesc;
+	  	ae.onclick = function() { changeData(data); }; 	  	
+	  } else {
+	  	ae.setAttribute("href", "#about");
+	  } 
+	  
+	  ae.innerHTML=time;  
+	    
+	  dive.appendChild(ae);        
+	  document.getElementById('scheduleList').appendChild(dive);
+	
+	}
+  
+  function sendMessage(){
+  	window.MainActivity.sendMessage("fm");
+  }      
+   
+  function intervalTrigger() {
+  	return window.setInterval( function(){
+  		queryNextFMOrder();
+  	}, 300000 );
+  } 
+	
+  	
+</script>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+
+<head>
+	<link rel="stylesheet" href="stylesheets/base.css">
+	<link rel="stylesheet" href="stylesheets/skeleton.css">
+	<link rel="stylesheet" href="stylesheets/layout.css">
+	<link rel="stylesheet" href="stylesheets/styles.css">
+	
+	<!-- FlexSlider - Slideshow -->
+	<link rel="stylesheet" href="stylesheets/flexslider.css" type="text/css">
+    <script src="jquery.js"></script>
+    <script src="js/jquery.flexslider.js"></script>
+	
+	<script type="text/javascript" charset="utf-8">
+     $(window).load(function() {
+       $('.flexslider').flexslider({
+        animation: "slide",
+		controlNav: true,
+        directionNav: true,
+        prevText: "Previous",
+        nextText: "Next"
+      });
+     });
+    </script>
+    
+</head>
+<body data-role="page" id="page1">
+<!-- Navigation and Contact data -->
+	
+	<div class="container header"> 
+    <!-- Navigation -->  
+	   <h1 align="center">Quick Survey Application</h1>
+    </div>
+
+
+<!-- Slideshow -->	
+    <div class="container slider"> 
+	  <div class="flexslider">
+       <ul class="slides">
+        <li><img src="images/Tsel3.jpg" /></li>
+        <li><img src="images/Tsel5.jpg" /></li>
+        <li><img src="images/Tsel6.jpg" /></li>
+       </ul>
+      </div>
+	</div> 
+
+<!-- Testimonial -->	
+    <div class="container testimonial">
+      
+			<a href="#" data-role="button" id="CAROLHref" onClick="callNewActivity('CAROL');">CAROL Mode</a>              
+            <a href="#" data-role="button" id="FMHref" onClick="callNewActivity('FM');">FM Mode</a>
+		</div>
+
+<div class="container lines2"></div>
+
+<!-- Copyrights and social icons -->		
+	<footer class="container footer">
+		
+		<div align="center">
+			<em>Copyright@PT. Telekomunikasi Selular</em>
+	   </div>
+</footer> 
+
+</body>
+</html>
+<script>
+document.addEventListener("deviceready", onDeviceReady, false);
+    function onDeviceReady() {
+        document.addEventListener("backbutton", function (e) {
+            e.preventDefault();
+        }, false );
+  }
+  
+  
+  
+  $.mobile.loadingMessage = false;
+  
+  $(document).bind("pageinit", "#page1", function(){
+  });
+  
+  var poller;
+  
+  function queryNextFMOrder(){
+  	var order = window.MainActivity.queryNextFMOrder();
+  	if(order!=null && order !=""){
+  		
+  		window.clearInterval(poller);
+  		window.MainActivity.processFMOrder(order);
+  	}
+  }
+    
+  function callNewActivity(appName) { 		
+  		var id = window.MainActivity.setModeOn(appName);
+  		
+  		if(id!=null && id != ""){
+  			var docName = appName+"Href";
+  			document.getElementById(appName+"Href").innerHTML = appName + " Mode : ON";  			  			  			
+  			
+  			if(appName == "FM"){
+  				poller = intervalTrigger();
+  				document.getElementById("CAROLHref").innerHTML = "CAROL Mode";
+  			} else {
+  				document.getElementById("FMHref").innerHTML = "FM Mode";
+  				window.clearInterval(poller);
+  			}
+  		}
+        return false;
+  }
+   
+  function intervalTrigger() {
+  	return window.setInterval( function(){
+  		queryNextFMOrder();
+  	}, 5000 );
+  } 
+</script> 
+

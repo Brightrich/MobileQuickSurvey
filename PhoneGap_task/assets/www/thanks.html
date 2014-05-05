@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<head>
+
+  <meta charset="utf-8" />
+  <!-- Set the viewport width to device width for mobile -->
+  <meta name="viewport" content="width=device-width" />
+
+  <title>Theme by CssTemplateHeaven</title>
+  
+  <!-- Included CSS Files (Compressed) -->
+  <link rel="stylesheet" href="foundation.min.css">
+  <link rel="stylesheet" href="main.css">
+  <link rel="stylesheet" href="app.css">
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+</head>
+
+<body>
+
+<!-- ######################## Main Menu ######################## -->
+ 
+<!-- ######################## Header ######################## -->
+        
+        <header>
+              <h1 class="heading_supersize">TERIMA KASIH</h1>         
+              <h2 id="content"></h2>     
+        </header>
+        
+<!-- ######################## Section ######################## -->
+     
+<!-- ######################## Footer ######################## -->  
+      
+<footer>
+
+      <div class="row">
+      
+          <div class="twelve columns footer">
+              <em>Copyright@PT. Telekomunikasi Selular</em>
+          </div>
+          
+      </div>
+
+</footer>
+</body>
+</html>
+<script>
+document.addEventListener("deviceready", onDeviceReady, false);
+    function onDeviceReady() {
+        document.addEventListener("backbutton", function (e) {
+            e.preventDefault();
+        }, false );
+}
+
+
+var ale = window.PageAttr.getAllCAROLDATA();
+document.getElementById("content").innerHtml = ale; 
+
+setTimeout(function(){window.Controller.finishActivity();}, 5000);
+
+</script>

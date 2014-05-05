@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+
+<head>
+
+  <meta charset="utf-8" />
+  <!-- Set the viewport width to device width for mobile -->
+  <meta name="viewport" content="width=device-width" />
+
+  <title>Theme by CssTemplateHeaven</title>
+  
+  <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+  <script src="jquery.js"></script>
+  <script src="jquery.mobile-1.0.min.js"></script>
+  <script src="quickSurveyInterface.js"></script>
+  <script src="js/jquery.scrollTo.min.js"></script>
+  <!-- Included CSS Files (Compressed) -->
+  <link rel="stylesheet" href="foundation.min.css">
+  <link rel="stylesheet" href="main.css">
+  <link rel="stylesheet" href="app.css">
+  
+</head>
+
+<body data-role="page" id="page1">
+
+<!-- ######################## Main Menu ######################## -->
+
+<!-- ######################## Header ######################## -->
+        
+        <header>
+          <div class="row">
+          <div class="eleven columns">  
+          <article>
+              <h3 id="titleWelcome"> </h3>    
+              <label><strong>Selamat menggunakan mobil operasional ini</strong></label>    
+              <label><strong id="titleDest"></strong></label>    
+              <label><strong>&nbsp;</strong></label>    
+              <label><strong>Untuk meningkatkan kualitas pelayanan kami, silahkan isi feedback di bawah ini. Terima kasih</strong></label>    
+           </article>
+           </div>
+           <div class="one columns">
+           		<img src="images/speech.png" width="50" height="50" id="greeting" align="right" onClick="callTTS();"/>
+           </div>
+           </div>   
+        </header>
+      
+   <!-- ######################## Section ######################## -->
+      
+      <section class="section_light">
+      <div class="row">
+
+
+<div class="row">
+<div class="seven columns">
+ 
+      
+      <ul>
+        <table width="100%" id="table_quest">
+        
+      	</table>
+      </ul>
+   
+       <textarea placeholder="Saran (optional)" id="suggestion"></textarea>
+       <a href="#" data-role="button" class="button success" onclick="submitData();">Submit</a>            
+</div>
+
+<div class="five columns">
+<div class="panel">
+				
+			<h3>Data Supir</h3>
+			<label><strong>Nama</strong></label>
+		  <input name="dName" id="dName" value="" disabled class="input_title_invoice" type="text"><p></p>
+		  
+		  <label><strong>No. Pol</strong></label>
+		  <input name="nPol" id="nPol" value="" disabled class="input_title_invoice" type="text"><p></p>
+        
+	</div> <!-- end panel -->
+
+</div>
+</div><!-- end row -->
+
+
+
+      </div>
+
+        </section>
+        
+		<!-- end section -->
+        
+<!-- ######################## Footer ######################## -->  
+      
+<footer>
+
+      <div class="row">
+      
+          <div class="twelve columns footer">
+              <em>Copyright@PT. Telekomunikasi Selular</em>
+          </div>
+          
+      </div>
+
+</footer>
+
+   
+  
+</body>
+<script>
+
+  document.addEventListener("deviceready", onDeviceReady, false);
+    function onDeviceReady() {
+        document.addEventListener("backbutton", function (e) {
+            e.preventDefault();            
+        }, false );
+  }	
+
+  var checkedQuest=new Array();
+  var feedRateArr = "";
+  var name = "";
+
+  $.mobile.loadingMessage = false;
+  
+  $(document).bind("pageinit", "#page1", function(){
+  //             0            1             2            3          4              5           6          7
+  //CAROL = {KEY_ROWID, RESERVATION_ID ,APP_NAME, RESERVED_BY, PLATE_NUMBER, DRIVER_NAME, DESTINATION, PURPOSE}
+  //EQ    =       8        CAR-001         CAROL   B 811 SEL     GOGON          ANDRO        WISMUL     
+  //Delimited by @
+  var ord = window.PageAttr.getOrderData();   
+  
+  var parsedOrd = ord.split("@");
+  name = parsedOrd[3];
+  	
+  document.getElementById("titleWelcome").innerHTML = "Selamat Datang "+parsedOrd[3]; 
+  document.getElementById("dName").value = parsedOrd[5]; 
+  document.getElementById("nPol").value  = parsedOrd[4]; 
+  document.getElementById("titleDest").innerHTML = "Anda akan diantar ke tujuan gedung "+ parsedOrd[6];
+  
+  //Get Feed rate
+  var feedRate = window.PageAttr.queryFeedbackRate();  
+  feedRateArr = feedRate.split("#");
+  	
+  buildQuestionnairesTable();
+    
+  });
+  
+ function focusTo(e){ 
+    alert("IN SCROLL TO");    
+    //window.scrollTo(0, 60000);
+    //$('#suggestion').ScrollTo();
+    alert("OUT SCROLL TO");
+ } 
+  
+ function chosen(x){
+   
+  //GUIDELINE of X
+  //    0         1                 2               3 
+  //CRITERIA_ID, APP_NAME, CRITERIA_ORDER_NUMBER, RATE_ID
+  //delimited by #
+
+  var chosen = x.split("#");
+  var chosenImg = chosen[3];
+  var isAdded = false;
+  
+  //Iterate feedback Rate
+  //GUIDELINE 
+  //     0          1              2              3
+  //{KEY_ROWID, RATE_NAME, RATE_DESCRIPTION, IMAGE_PATH}  
+  for(var y = 0; y < feedRateArr.length; y++){
+    var feedRateCol = feedRateArr[y].split("@");
+
+    if(feedRateCol[0] != chosenImg){
+      //unselect
+      var unselect = chosen[0]+"#"+chosen[1]+"#"+chosen[2]+"#"+feedRateCol[0];
+      var doc = document.getElementById(unselect);
+      doc.src = "bw-"+feedRateCol[3];
+    } else {
+      var doc = document.getElementById(x);
+      doc.src = feedRateCol[3];
+    }      
+  }
+  
+  
+  //Update storage
+    //alert(x + "chosen");
+    var length = checkedQuest.length;
+    
+    if(length > 0 ){
+      for(var idx=0; idx < checkedQuest.length; idx++){
+        var sel = checkedQuest[idx];
+        var comparedTo = sel.substring(0, sel.lastIndexOf("#"));
+           
+      if(comparedTo == x.substring(0, x.lastIndexOf("#"))){
+        removeObjectFromStorage(idx);          
+        addObjectToStorage(x);
+        isAdded = true;
+        break;
+      } 
+      }
+
+      if(!isAdded){
+        addObjectToStorage(x);
+      }
+
+
+    } else {
+      addObjectToStorage(x);
+    }            
+ 
+  } 
+  
+
+  function addObjectToStorage(x){
+    var addIdx = checkedQuest.length;       
+    checkedQuest.splice(addIdx,0,x);
+  }
+
+  function removeObjectFromStorage(index){
+    checkedQuest.splice(index,1);
+  }
+    
+  function callTTS(){
+   window.Controller.textToSpeech(name);  
+  }  
+    
+  function submitData(){
+
+    var result = "";
+    for(var idx=0; idx < checkedQuest.length; idx++){
+      if(result == ""){
+        result = checkedQuest[idx];
+      } else {
+        result = result +"@"+ checkedQuest[idx];
+      }
+    }  
+
+    //GUIDELINE of Result
+    //    0         1                 2               3 
+    //CRITERIA_ID#APP_NAME#CRITERIA_ORDER_NUMBER#RATE_ID@CRITERIA_ID#APP_NAME#CRITERIA_ORDER_NUMBER#RATE_ID
+    //delimited by # and for each new row marked by @
+    
+	  window.PageAttr.setVoteData(result);
+	
+    var advice = $("#suggestion").val();
+    window.PageAttr.setSuggestion(advice);
+	
+	callNewActivity();
+  }  
+  
+  function callNewActivity() { 	
+        window.Controller.sendMessage();
+        return false;
+    }
+ </script>

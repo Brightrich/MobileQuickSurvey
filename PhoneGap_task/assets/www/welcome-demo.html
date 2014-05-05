@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<head>
+
+  <meta charset="utf-8" />
+  <!-- Set the viewport width to device width for mobile -->
+  <meta name="viewport" content="width=device-width" />
+
+  <title>Theme by CssTemplateHeaven</title>
+  
+  <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+  <script src="jquery.js"></script>
+  <script src="jquery.mobile-1.0.min.js"></script>
+  <script src="quickSurveyInterface.js"></script>
+
+  <!-- Included CSS Files (Compressed) -->
+  <link rel="stylesheet" href="foundation.min.css">
+  <link rel="stylesheet" href="main.css">
+  <link rel="stylesheet" href="app.css">
+  
+  <link rel="stylesheet" href="stylesheets/flexslider.css" type="text/css">    
+    <script src="js/jquery.flexslider.js"></script>
+	
+	<script type="text/javascript" charset="utf-8">
+     $(window).load(function() {
+       $('.flexslider').flexslider({
+        animation: "slide",
+		controlNav: true,
+        directionNav: true,
+        prevText: "Previous",
+        nextText: "Next"
+      });
+     });
+    </script>
+  
+</head>
+
+<body data-role="page" id="page1">
+
+<!-- ######################## Main Menu ######################## -->
+ 
+<!-- ######################## Header ######################## -->
+        
+        <header>
+              <h1 class="welcome_text">Quick Survey Application</h1>                                          
+        </header>
+        
+        <!-- Slideshow -->	
+     
+        
+<!-- ######################## Section ######################## -->
+     
+      <section class="section_light">
+      <div class="row">
+		<div class="twelve columns">
+			
+			<div class="container slider" id="touchToSlide"> 
+	  			<div class="flexslider" >
+			       <ul class="slides">
+			        <li><img src="images/Tsel6.jpg" /></li>
+			        <li><img src="images/TSEL9.jpg" /></li>
+			        <li><img src="images/Tsel5.jpg" /></li>			        
+			       </ul>
+      			</div>
+			</div>	
+			
+		<table width="100%">
+			<tr>
+				<td style="text-align:left;vertical-align:middle"><h2 class="welcome_text"><a href="#" data-role="button" id="CAROLSHref" onClick="callNewActivity('CAROLS');">CAROLS Mode</a></h2></td>
+				<td style="text-align:right;vertical-align:middle"><h2 class="welcome_text"><a href="#" data-role="button" id="FMHref" onClick="callNewActivity('FM');">FM Mode</a></h2></td>
+				<td style="text-align:right;vertical-align:middle"><h2 class="welcome_text"><img src="images/ab.png" data-role="button" width="50" height="50" id="abLauncher" onClick="runAngryBirds();"/></h2></td>
+			</tr>	
+		</table>	
+		</div>
+	  </div>
+	  </section>
+     
+<!-- ######################## Footer ######################## -->  
+      
+<footer>
+
+      <div class="row">
+      
+          <div class="twelve columns footer">
+              <em>Copyright@PT. Telekomunikasi Selular</em>
+          </div>
+          
+      </div>
+
+</footer>
+</body>
+</html>
+<script>
+document.addEventListener("deviceready", onDeviceReady, false);
+    function onDeviceReady() {
+        document.addEventListener("backbutton", function (e) {
+            e.preventDefault();
+        }, false );
+        
+        document.addEventListener("menubutton", function (e) {
+            e.preventDefault();
+        }, false );
+        
+        document.addEventListener("searchbutton", function (e) {
+            e.preventDefault();
+        }, false );
+        
+        
+      //  intervalTrigger();
+  }   
+  
+  $.mobile.loadingMessage = false;
+  
+  $(document).bind("pageinit", "#page1", function(){
+  });
+  
+  var poller;
+    
+  function queryNextFMOrder(){
+  	var order = window.MainActivity.queryNextFMOrder();
+  	if(order!=null && order !=""){
+  		
+  		window.clearInterval(poller);
+  		window.MainActivity.processFMOrder(order);
+  	}
+  }
+  
+  function runAngryBirds(){
+  	window.MainActivity.runAngryBirds();
+  
+  }
+    
+  function callNewActivity(appName) { 		
+  		var id = window.MainActivity.setModeOn(appName);
+  		
+  		if(id!=null && id != ""){
+  			var docName = appName+"Href";
+  			document.getElementById(appName+"Href").innerHTML = appName + " Mode : ON";  			  			  			
+  			
+  			if(appName == "FM"){
+  				poller = intervalTrigger();
+  				document.getElementById("CAROLSHref").innerHTML = "CAROLS Mode";
+  			} else {
+  				document.getElementById("FMHref").innerHTML = "FM Mode";
+  				window.clearInterval(poller);
+  			}
+  		}
+        return false;
+  }
+   
+  function intervalTrigger() {
+  	return window.setInterval( function(){
+  		queryNextFMOrder();
+  	}, 5000 );
+  } 
+</script>        
